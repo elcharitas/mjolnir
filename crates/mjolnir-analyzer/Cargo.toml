@@ -1,0 +1,13 @@
+[package]
+name = "mjolnir-analyzer"
+version = "0.1.0"
+edition = "2024"
+description = "A tool for analyzing Polkadot smart contracts"
+authors = ["Mjolnir Team"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+regex = "1.10.2"
+thiserror = "1.0"
+log = "0.4"
