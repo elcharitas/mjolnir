@@ -3,13 +3,13 @@
 //! This crate provides functionality to analyze smart contracts and generate
 //! metrics on security, performance, gas efficiency, and code quality.
 
+pub mod api;
 mod models;
 mod rules;
 
 pub use models::{AnalysisResults, AnalyzerConfig, Category, Issue, Metrics, Severity};
 pub use rules::{AnalysisRule, get_default_rules};
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// Main analyzer for smart contracts

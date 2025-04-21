@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build-analyzer.js && next build",
+    "build:analyzer": "node scripts/build-analyzer.js",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "node scripts/build-analyzer.js"
   },
   "dependencies": {
     "next": "15.3.1",
