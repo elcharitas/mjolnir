@@ -1,5 +1,3 @@
-import React from "react";
-
 type ContractInputProps = {
 	contractCode: string;
 	setContractCode: (code: string) => void;
