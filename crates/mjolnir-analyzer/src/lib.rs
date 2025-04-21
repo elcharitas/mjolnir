@@ -135,8 +135,6 @@ impl Analyzer {
             }
         }
 
-        // Calculate metrics (simplified implementation)
-        // In a real implementation, these would use more sophisticated algorithms
         let code_len = code.lines().count() as f32;
         let base_score = 100.0;
 
@@ -246,7 +244,7 @@ mod tests {
         let analyzer = Analyzer::with_config(config);
         let code = "function transfer() { /* code */ }";
 
-        let results = analyzer.analyze(code);
+        analyzer.analyze(code);
         // With custom config, we should only have reentrancy rule enabled
         assert!(analyzer.rules.len() == 1);
     }

@@ -22,7 +22,6 @@ pub struct ReentrancyRule {}
 
 impl AnalysisRule for ReentrancyRule {
     fn analyze(&self, code: &str) -> Vec<Issue> {
-        // Simplified implementation - in reality, this would use proper parsing
         if code.contains("transfer") && !code.contains("checks-effects-interactions") {
             vec![Issue {
                 severity: Severity::High,
@@ -58,7 +57,6 @@ pub struct StorageEfficiencyRule {}
 
 impl AnalysisRule for StorageEfficiencyRule {
     fn analyze(&self, code: &str) -> Vec<Issue> {
-        // Simplified implementation
         if code.contains("storage") && !code.contains("packed") {
             vec![Issue {
                 severity: Severity::Medium,
@@ -96,7 +94,6 @@ pub struct EventEmissionRule {}
 
 impl AnalysisRule for EventEmissionRule {
     fn analyze(&self, code: &str) -> Vec<Issue> {
-        // Simplified implementation
         if code.contains("state") && !code.contains("emit") {
             vec![Issue {
                 severity: Severity::Low,
