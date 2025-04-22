@@ -6,6 +6,7 @@ import AnalysisResults, {
 	type AnalysisResultsProps,
 } from "@/components/AnalysisResults";
 import ContractInput from "@/components/ContractInput";
+import { analyzeContract } from "./actions";
 
 export default function Home() {
 	const [contractCode, setContractCode] = useState("");
@@ -18,20 +19,8 @@ export default function Home() {
 
 		setIsAnalyzing(true);
 		try {
-			const response = await fetch("/api/analyze", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ code: contractCode }),
-			});
-
-			if (!response.ok) {
-				throw new Error("Analysis request failed");
-			}
-
-			const data = await response.json();
-			setAnalysisResults(data);
+			const result = await analyzeContract(contractCode);
+			setAnalysisResults(result);
 		} catch (error) {
 			console.error("Analysis failed:", error);
 		} finally {

@@ -9,24 +9,10 @@
 
 const { execSync } = require("node:child_process");
 const { join } = require("node:path");
-const { existsSync, mkdirSync } = require("node:fs");
 
-// Paths
 const ROOT_DIR = process.cwd();
 const CRATES_DIR = join(ROOT_DIR, "crates");
 const ANALYZER_DIR = join(CRATES_DIR, "mjolnir-analyzer");
-const TARGET_DIR = join(ROOT_DIR, "target");
-const RELEASE_DIR = join(TARGET_DIR, "release");
-
-// Ensure target directory exists
-if (!existsSync(TARGET_DIR)) {
-	mkdirSync(TARGET_DIR, { recursive: true });
-}
-
-// Ensure release directory exists
-if (!existsSync(RELEASE_DIR)) {
-	mkdirSync(RELEASE_DIR, { recursive: true });
-}
 
 console.log("Building Mjolnir Analyzer CLI...");
 

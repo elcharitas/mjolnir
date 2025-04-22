@@ -41,9 +41,7 @@ impl Analyzer {
             config,
         };
 
-        // Register default rules
         for rule in get_default_rules() {
-            // Only register rules that are enabled in the config
             if analyzer.config.enabled_rules.contains(&"all".to_string())
                 || analyzer
                     .config
