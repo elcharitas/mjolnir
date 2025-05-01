@@ -1,5 +1,9 @@
 //! Analysis rules for smart contracts
 
+mod advanced_vulnerabilities;
+mod contract_patterns;
+mod contract_vulnerabilities;
+
 use crate::models::{Category, Issue, Severity};
 
 /// Trait for implementing analysis rules
@@ -22,21 +26,38 @@ pub struct ReentrancyRule {}
 
 impl AnalysisRule for ReentrancyRule {
     fn analyze(&self, code: &str) -> Vec<Issue> {
-        if code.contains("transfer") && !code.contains("checks-effects-interactions") {
-            vec![Issue {
+        let mut issues = Vec::new();
+
+        // Check for state changes after external calls
+        let has_transfer = code.contains("transfer") || code.contains(".call");
+        let has_state_change_after_call = code.lines().enumerate().any(|(i, line)| {
+            if line.contains("transfer") || line.contains(".call") {
+                // Check if any line after this contains state changes
+                code.lines().skip(i + 1).any(|next_line| {
+                    next_line.contains("=")
+                        || next_line.contains("[]")
+                        || next_line.contains("balances")
+                })
+            } else {
+                false
+            }
+        });
+
+        if has_transfer && has_state_change_after_call {
+            issues.push(Issue {
                 severity: Severity::High,
                 message: "Potential reentrancy vulnerability in withdraw function".to_string(),
                 line: Some(
                     code.lines()
-                        .position(|line| line.contains("transfer"))
+                        .position(|line| line.contains("transfer") || line.contains(".call"))
                         .unwrap_or(0)
                         + 1,
                 ),
-                recommendation: Some("Implement checks-effects-interactions pattern".to_string()),
-            }]
-        } else {
-            vec![]
+                recommendation: Some("Implement checks-effects-interactions pattern: perform all state changes before making external calls".to_string()),
+            });
         }
+
+        issues
     }
 
     fn category(&self) -> Category {
@@ -242,13 +263,38 @@ impl AnalysisRule for SecurityBestPracticesRule {
     }
 }
 
+// Re-export the vulnerability and pattern rules
+pub use advanced_vulnerabilities::*;
+pub use contract_patterns::*;
+pub use contract_vulnerabilities::*;
+
 /// Get all default rules
 pub fn get_default_rules() -> Vec<Box<dyn AnalysisRule>> {
     vec![
+        // Original rules
         Box::new(ReentrancyRule {}),
         Box::new(StorageEfficiencyRule {}),
         Box::new(EventEmissionRule {}),
         Box::new(GasOptimizationRule {}),
         Box::new(SecurityBestPracticesRule {}),
+        // Vulnerability rules
+        Box::new(IntegerOverflowRule {}),
+        Box::new(SelfDestructRule {}),
+        Box::new(TimestampDependenceRule {}),
+        Box::new(FrontRunningRule {}),
+        Box::new(UncheckedReturnRule {}),
+        Box::new(DoSVulnerabilityRule {}),
+        // Pattern rules
+        Box::new(MissingVisibilityRule {}),
+        Box::new(FloatingPragmaRule {}),
+        Box::new(DeprecatedPatternsRule {}),
+        Box::new(TxOriginAuthRule {}),
+        Box::new(AssemblyUsageRule {}),
+        // Advanced vulnerability rules
+        Box::new(DosWithRevertRule {}),
+        Box::new(BlockGasLimitRule {}),
+        Box::new(ForceSendEtherRule {}),
+        Box::new(SignatureMalleabilityRule {}),
+        Box::new(WeakRandomnessRule {}),
     ]
 }

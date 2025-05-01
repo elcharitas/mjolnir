@@ -1,18 +1,20 @@
-// `dot` is the identifier assigned during `npx papi add`
+// `dot` is the alias assigned when running `npx papi add`
 import { dot } from "@polkadot-api/descriptors";
 import { createClient } from "polkadot-api";
 import { getSmProvider } from "polkadot-api/sm-provider";
 import { chainSpec } from "polkadot-api/chains/polkadot";
-import { startFromWorker } from "polkadot-api/smoldot/from-worker";
-import SmWorker from "polkadot-api/smoldot/worker?worker";
+import { start } from "polkadot-api/smoldot";
 
-const worker = new SmWorker();
-const smoldot = startFromWorker(worker);
+// Initialize Smoldot client
+const smoldot = start();
 const chain = await smoldot.addChain({ chainSpec });
 
-// Establish connection to the Polkadot relay chain
+// Set up a client to connect to the Polkadot relay chain
 const client = createClient(getSmProvider(chain));
 
-// To interact with the chain, obtain the `TypedApi`, which provides
-// the necessary types for every API call on this chain
-const dotApi = client.getTypedApi(dot);
+// Access the `TypedApi` to interact with all available chain calls and types
+const typedApi = client.getTypedApi(dot);
+
+const version = await typedApi.constants.System.Version();
+
+const metadata = await typedApi.apis.Metadata.metadata();
