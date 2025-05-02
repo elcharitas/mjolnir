@@ -7,11 +7,13 @@ import AnalysisResults, {
 } from "@/components/AnalysisResults";
 import ContractInput from "@/components/ContractInput";
 import { analyzeContract } from "./actions";
+import { convertContract, type ContractType } from "@/lib/converter";
 import toast from "react-hot-toast";
 
 export default function Home() {
 	const [contractCode, setContractCode] = useState("");
 	const [isAnalyzing, setIsAnalyzing] = useState(false);
+	const [isConverting, setIsConverting] = useState(false);
 	const [analysisResults, setAnalysisResults] =
 		useState<AnalysisResultsProps | null>(null);
 
@@ -23,11 +25,16 @@ export default function Home() {
 		}
 
 		// Basic contract structure validation
-		if (
-			!trimmedCode.includes("#[ink::contract]") &&
-			!trimmedCode.includes("#[contract]")
-		) {
-			toast.error("Invalid contract: Missing ink! contract attribute");
+		const isInkContract =
+			trimmedCode.includes("#[ink::contract]") ||
+			trimmedCode.includes("#[contract]");
+		const isSolidityContract =
+			trimmedCode.includes("contract") && trimmedCode.includes("{");
+
+		if (!isInkContract && !isSolidityContract) {
+			toast.error(
+				"Invalid contract: Must be either an Ink! or Solidity contract",
+			);
 			return;
 		}
 
@@ -37,8 +44,35 @@ export default function Home() {
 			setAnalysisResults(result);
 		} catch (error) {
 			console.error("Analysis failed:", error);
+			toast.error("Analysis failed. Please try again.");
 		} finally {
 			setIsAnalyzing(false);
+		}
+	};
+
+	const handleConvert = async (targetType: ContractType) => {
+		const trimmedCode = contractCode.trim();
+		if (!trimmedCode) {
+			toast.error("No contract code provided");
+			return;
+		}
+
+		setIsConverting(true);
+		try {
+			const result = await convertContract(contractCode, {
+				target: targetType,
+			});
+			if (result) {
+				setContractCode(result.convertedCode);
+				toast.success(`Successfully converted to ${targetType}`);
+			} else {
+				toast.error(`Failed to convert to ${targetType}`);
+			}
+		} catch (error) {
+			console.error("Conversion failed:", error);
+			toast.error("Conversion failed. Please try again.");
+		} finally {
+			setIsConverting(false);
 		}
 	};
 
@@ -70,6 +104,8 @@ export default function Home() {
 					setContractCode={setContractCode}
 					isAnalyzing={isAnalyzing}
 					onAnalyze={handleAnalyze}
+					isConverting={isConverting}
+					onConvert={handleConvert}
 				/>
 
 				{analysisResults && <AnalysisResults {...analysisResults} />}

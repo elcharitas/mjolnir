@@ -1,15 +1,23 @@
+import type { ContractType } from "@/lib/converter";
+
 type ContractInputProps = {
 	contractCode: string;
 	setContractCode: (code: string) => void;
 	isAnalyzing: boolean;
 	onAnalyze: () => void;
+	isConverting: boolean;
+	onConvert: (targetType: ContractType) => void;
 };
+
+import ContractConverter from "./ContractConverter";
 
 export default function ContractInput({
 	contractCode,
 	setContractCode,
 	isAnalyzing,
 	onAnalyze,
+	isConverting,
+	onConvert,
 }: ContractInputProps) {
 	return (
 		<section className="mb-12">
@@ -20,11 +28,17 @@ export default function ContractInput({
 				<div className="mb-4">
 					<textarea
 						className="w-full h-64 p-4 bg-background border border-foreground/20 rounded-lg font-[family-name:var(--font-geist-mono)] text-sm focus:outline-none focus:ring-2 focus:ring-foreground/30"
-						placeholder="Paste your Polkadot smart contract code here..."
+						placeholder="Paste your smart contract code here (Ink! or Solidity)..."
 						value={contractCode}
 						onChange={(e) => setContractCode(e.target.value)}
 					/>
 				</div>
+				<ContractConverter
+					contractCode={contractCode}
+					setContractCode={setContractCode}
+					isConverting={isConverting}
+					onConvert={onConvert}
+				/>
 				<div className="flex justify-end">
 					<button
 						type="button"
