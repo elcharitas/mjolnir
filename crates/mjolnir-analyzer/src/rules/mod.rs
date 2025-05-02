@@ -263,6 +263,109 @@ impl AnalysisRule for SecurityBestPracticesRule {
     }
 }
 
+pub struct GasAnalysisRule {}
+impl AnalysisRule for GasAnalysisRule {
+    fn analyze(&self, code: &str) -> Vec<Issue> {
+        let mut issues = Vec::new();
+        // Check for unnecessary storage reads
+        if code.contains("storage") && code.contains("read") && code.contains("loop") {
+            issues.push(Issue {
+                severity: Severity::Low,
+                message: "Multiple storage reads that could be cached".to_string(),
+                line: Some(
+                    code.lines()
+                        .position(|line| line.contains("storage") && line.contains("read"))
+                        .unwrap_or(0)
+                        + 1,
+                ),
+                recommendation: Some(
+                    "Cache storage values in memory when reading multiple times".to_string(),
+                ),
+            });
+        }
+        // Check for unnecessary storage writes
+        if code.contains("storage") && code.contains("write") && code.contains("loop") {
+            issues.push(Issue {
+                severity: Severity::Low,
+                message: "Multiple storage writes that could be batched".to_string(),
+                line: Some(
+                    code.lines()
+                        .position(|line| line.contains("storage") && line.contains("write"))
+                        .unwrap_or(0)
+                        + 1,
+                ),
+                recommendation: Some(
+                    "Batch storage writes when possible to reduce gas costs".to_string(),
+                ),
+            });
+        }
+        issues
+    }
+
+    fn category(&self) -> Category {
+        Category::GasEfficiency
+    }
+
+    fn id(&self) -> &'static str {
+        "gas_analysis"
+    }
+
+    fn description(&self) -> &'static str {
+        "Analyzes gas usage patterns in smart contracts"
+    }
+}
+
+pub struct SecurityAnalysisRule {}
+impl AnalysisRule for SecurityAnalysisRule {
+    fn analyze(&self, code: &str) -> Vec<Issue> {
+        let mut issues = Vec::new();
+        // Check for unchecked external calls
+        if code.contains("call") && !code.contains("require") {
+            issues.push(Issue {
+                severity: Severity::High,
+                message: "Unchecked external call result".to_string(),
+                line: Some(
+                    code.lines()
+                        .position(|line| line.contains("call"))
+                        .unwrap_or(0)
+                        + 1,
+                ),
+                recommendation: Some("Always check the return value of external calls".to_string()),
+            });
+        }
+
+        // Check for proper access control
+        if code.contains("function")
+            && !code.contains("onlyOwner")
+            && !code.contains("require(msg.sender")
+        {
+            issues.push(Issue {
+                severity: Severity::Medium,
+                message: "Function may lack proper access control".to_string(),
+                line: Some(
+                    code.lines()
+                        .position(|line| line.contains("function") && !line.contains("private"))
+                        .unwrap_or(0)
+                        + 1,
+                ),
+                recommendation: Some(
+                    "Implement access control for sensitive functions".to_string(),
+                ),
+            });
+        }
+        issues
+    }
+    fn category(&self) -> Category {
+        Category::Security
+    }
+    fn id(&self) -> &'static str {
+        "security_analysis"
+    }
+    fn description(&self) -> &'static str {
+        "Analyzes common security vulnerabilities in smart contracts"
+    }
+}
+
 // Re-export the vulnerability and pattern rules
 pub use advanced_vulnerabilities::*;
 pub use contract_patterns::*;
@@ -277,6 +380,8 @@ pub fn get_default_rules() -> Vec<Box<dyn AnalysisRule>> {
         Box::new(EventEmissionRule {}),
         Box::new(GasOptimizationRule {}),
         Box::new(SecurityBestPracticesRule {}),
+        Box::new(GasAnalysisRule {}),
+        Box::new(SecurityAnalysisRule {}),
         // Vulnerability rules
         Box::new(IntegerOverflowRule {}),
         Box::new(SelfDestructRule {}),

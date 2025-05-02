@@ -7,6 +7,7 @@ import AnalysisResults, {
 } from "@/components/AnalysisResults";
 import ContractInput from "@/components/ContractInput";
 import { analyzeContract } from "./actions";
+import toast from "react-hot-toast";
 
 export default function Home() {
 	const [contractCode, setContractCode] = useState("");
@@ -15,7 +16,20 @@ export default function Home() {
 		useState<AnalysisResultsProps | null>(null);
 
 	const handleAnalyze = async () => {
-		if (!contractCode.trim()) return;
+		const trimmedCode = contractCode.trim();
+		if (!trimmedCode) {
+			toast.error("No contract code provided");
+			return;
+		}
+
+		// Basic contract structure validation
+		if (
+			!trimmedCode.includes("#[ink::contract]") &&
+			!trimmedCode.includes("#[contract]")
+		) {
+			toast.error("Invalid contract: Missing ink! contract attribute");
+			return;
+		}
 
 		setIsAnalyzing(true);
 		try {

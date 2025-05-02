@@ -12,6 +12,7 @@ type Issue = {
 	message: string;
 	line?: number;
 	recommendation?: string;
+	category?: "security" | "gas" | "quality" | "performance";
 };
 
 export type AnalysisResultsProps = {
@@ -88,7 +89,20 @@ export default function AnalysisResults({
 				</div>
 
 				<div>
-					<h3 className="text-lg font-semibold mb-3">Issues Found</h3>
+					<div className="flex items-center justify-between mb-3">
+						<h3 className="text-lg font-semibold">Issues Found</h3>
+						<div className="flex gap-2">
+							{["security", "gas", "quality", "performance"].map((category) => (
+								<button
+									key={category}
+									type="button"
+									className={`px-3 py-1 text-xs rounded-full border ${category === "security" ? "border-red-500/30 text-red-500" : category === "gas" ? "border-yellow-500/30 text-yellow-500" : "border-foreground/30"}`}
+								>
+									{category.charAt(0).toUpperCase() + category.slice(1)}
+								</button>
+							))}
+						</div>
+					</div>
 					<div className="space-y-3">
 						{issues.map((issue) => (
 							<div
