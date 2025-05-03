@@ -1,4 +1,5 @@
 import type { ContractType } from "@/lib/converter";
+import { SAMPLE_CONTRACTS } from "@/lib/samples";
 
 type ContractInputProps = {
 	contractCode: string;
@@ -23,9 +24,25 @@ export default function ContractInput({
 	return (
 		<section className="mb-12">
 			<div className="bg-foreground/5 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-foreground/10">
-				<h2 className="text-xl font-semibold mb-4">
-					Analyze Your Smart Contract
-				</h2>
+				<div className="flex items-center justify-between mb-4">
+					<h2 className="text-xl font-semibold">Analyze Your Smart Contract</h2>
+					<div className="flex gap-2">
+						<button
+							type="button"
+							className="rounded-full px-4 py-2 text-sm font-medium transition-colors bg-foreground/10 hover:bg-foreground/20"
+							onClick={() => setContractCode(SAMPLE_CONTRACTS.ink)}
+						>
+							Try Ink! Sample
+						</button>
+						<button
+							type="button"
+							className="rounded-full px-4 py-2 text-sm font-medium transition-colors bg-foreground/10 hover:bg-foreground/20"
+							onClick={() => setContractCode(SAMPLE_CONTRACTS.solidity)}
+						>
+							Try Solidity Sample
+						</button>
+					</div>
+				</div>
 				<div className="mb-4">
 					<CodeEditor
 						height="40vh"
