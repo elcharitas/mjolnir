@@ -10,6 +10,7 @@ type ContractInputProps = {
 };
 
 import ContractConverter from "./ContractConverter";
+import CodeEditor from "@monaco-editor/react";
 
 export default function ContractInput({
 	contractCode,
@@ -26,11 +27,18 @@ export default function ContractInput({
 					Analyze Your Smart Contract
 				</h2>
 				<div className="mb-4">
-					<textarea
-						className="w-full h-64 p-4 bg-background border border-foreground/20 rounded-lg font-[family-name:var(--font-geist-mono)] text-sm focus:outline-none focus:ring-2 focus:ring-foreground/30"
-						placeholder="Paste your smart contract code here (Ink! or Solidity)..."
+					<CodeEditor
+						height="40vh"
+						theme="vs-dark"
+						defaultLanguage="rust"
 						value={contractCode}
-						onChange={(e) => setContractCode(e.target.value)}
+						onChange={(value?: string) => setContractCode(value ?? "")}
+						defaultValue="// Paste your smart contract code here (Ink! or Solidity)..."
+						loading={
+							<div className="flex items-center justify-center h-full">
+								<div className="spinner-border text-primary animate-spin inline-block w-8 h-8 border-4 rounded-full" />
+							</div>
+						}
 					/>
 				</div>
 				<ContractConverter
