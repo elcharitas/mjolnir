@@ -10,7 +10,6 @@ type ContractConverterProps = {
 
 export default function ContractConverter({
 	contractCode,
-	setContractCode,
 	isConverting,
 	onConvert,
 }: ContractConverterProps) {

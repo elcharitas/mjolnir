@@ -13,8 +13,8 @@ const chain = await smoldot.addChain({ chainSpec });
 const client = createClient(getSmProvider(chain));
 
 // Access the `TypedApi` to interact with all available chain calls and types
-const typedApi = client.getTypedApi(dot);
+export const typedApi = client.getTypedApi(dot);
 
-const version = await typedApi.constants.System.Version();
+export const version = await typedApi.constants.System.Version();
 
-const metadata = await typedApi.apis.Metadata.metadata();
+export const metadata = await typedApi.apis.Metadata.metadata();
