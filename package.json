@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:analyzer": "node scripts/build-analyzer.js",
+    "build:analyzer": "node scripts/build-analyzer.js && node scripts/build-converter.js",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "node scripts/build-analyzer.js"
+    "postinstall": "yarn build:analyzer"
   },
   "dependencies": {
     "@polkadot-api/descriptors": "portal:.papi/descriptors",
