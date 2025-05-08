@@ -842,7 +842,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@polkadot-api/descriptors@portal:.papi/descriptors::locator=mjolnir%40workspace%3A."
   peerDependencies:
-    polkadot-api: "*"
+    polkadot-api: ">=1.9.11"
   languageName: node
   linkType: soft
 
