@@ -8,7 +8,7 @@
     "build:analyzer": "node scripts/build-analyzer.js && node scripts/build-converter.js",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "yarn build:analyzer"
+    "postinstall": "yarn build:analyzer && npx papi add dot"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

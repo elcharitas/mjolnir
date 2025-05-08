@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mjolnir: A Powerful IDE for Polkadot Smart Contract Development
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](package.json)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+</div>
+
+Mjolnir is a modern, web-based IDE designed specifically for Polkadot smart contract development, offering powerful analysis tools and a seamless development experience similar to Remix IDE.
+
+## ⚡ Key Features
+
+### Contract Analysis & Security
+
+- **Static Analysis**: Comprehensive code analysis for security vulnerabilities, performance bottlenecks, and code quality issues
+- **Gas Efficiency Checks**: Built-in analysis for gas optimization opportunities
+- **Performance Metrics**: Detailed scoring system for contract performance, security, and code quality
+- **Smart Recommendations**: Actionable suggestions for improving contract security and efficiency
+
+### Development Environment
+
+- **Modern Web Interface**: Built with Next.js and React for a smooth development experience
+- **Monaco Editor Integration**: Feature-rich code editing with syntax highlighting and autocompletion
+- **Real-time Analysis**: Instant feedback on code quality and potential issues
+
+## 🚧 Features in Development
+
+The following features are actively being worked on and will be available in future releases:
+
+- **Contract Deployment**: Direct deployment to Polkadot networks
+- **Testing Framework**: Comprehensive testing suite for smart contracts
+- **Interactive Debugging**: Step-by-step contract execution debugging
+- **Contract Verification**: Automated verification tools for deployed contracts
+
+## 🛠 Getting Started
 
 ```bash
-npm run dev
-# or
+# Install dependencies
+yarn install
+
+# Start the development server
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔍 Analysis Engine
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Mjolnir's analyzer is powered by a robust Rust-based analysis engine that examines contracts across multiple dimensions:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Security Analysis**: Detection of common vulnerabilities and security anti-patterns
+- **Performance Optimization**: Identification of performance bottlenecks and inefficient patterns
+- **Gas Efficiency**: Analysis of gas usage patterns and optimization opportunities
+- **Code Quality**: Enforcement of best practices and code quality standards
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
